@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -38,6 +40,24 @@ public class BillingServiceImpl implements BillingService {
         BillingResponse response = new BillingResponse();
         BeanUtils.copyProperties(billing,response);
 
+        return response;
+    }
+
+    @Override
+    public Map<String, String> delete(UUID userId, UUID billingId) {
+        User user = UserUtil.valid(userId,userRepository);
+        Map<String,String> response = new HashMap<>();
+
+        for(Billing billing : user.getBilling()){
+            if(billing.getId().equals(billingId)){
+                response.put("message",billing.getTitle() + " deletado com sucesso!");
+                user.getBilling().remove(billing);
+                billingRepository.deleteById(billingId);
+                userRepository.save(user);
+                return response;
+            }
+        }
+        response.put("message","Cobrança não existe");
         return response;
     }
 }

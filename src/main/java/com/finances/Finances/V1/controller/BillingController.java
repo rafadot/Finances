@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -20,6 +21,11 @@ public class BillingController {
     @PostMapping
     public ResponseEntity<BillingResponse> create(@RequestParam UUID userId, @RequestBody BillingRequest billingRequest){
         return new ResponseEntity<>(billingService.create(userId,billingRequest), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Map<String, String>> delete(@RequestParam UUID userId, @RequestParam UUID billingId){
+        return new ResponseEntity<>(billingService.delete(userId,billingId),HttpStatus.OK);
     }
 
 }
