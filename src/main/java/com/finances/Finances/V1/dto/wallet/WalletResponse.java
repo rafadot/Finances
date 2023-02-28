@@ -1,6 +1,6 @@
 package com.finances.Finances.V1.dto.wallet;
 
-import com.finances.Finances.V1.util.ConvertBigDecimal;
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,10 +22,10 @@ public class WalletResponse {
     private BigDecimal monthlyExpense;
 
     public String getCurrentBalance() {
-        return ConvertBigDecimal.convert(currentBalance);
+        return BigDecimalUtil.convert(currentBalance);
     }
 
     public String getMonthlyExpense() {
-        return ConvertBigDecimal.convert(monthlyExpense);
+        return BigDecimalUtil.convert(monthlyExpense);
     }
 }

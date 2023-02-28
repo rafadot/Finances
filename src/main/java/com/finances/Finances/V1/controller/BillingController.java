@@ -18,8 +18,8 @@ public class BillingController {
     private final BillingService billingService;
 
     @PostMapping
-    public ResponseEntity<BillingResponse> create(@RequestParam UUID id, @RequestBody BillingRequest billingRequest){
-        return new ResponseEntity<>(billingService.create(id,billingRequest), HttpStatus.CREATED);
+    public ResponseEntity<BillingResponse> create(@RequestParam UUID userId, @RequestBody BillingRequest billingRequest){
+        return new ResponseEntity<>(billingService.create(userId,billingRequest), HttpStatus.CREATED);
     }
 
 }

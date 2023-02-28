@@ -1,6 +1,7 @@
 package com.finances.Finances.V1.controller;
 
 import com.finances.Finances.V1.dto.user.UserRequest;
+import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> allUsers(){
+    public ResponseEntity<List<AllUserResponse>> allUsers(){
         return new ResponseEntity<>(userService.allUsers(),HttpStatus.OK);
     }
 

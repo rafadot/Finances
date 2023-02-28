@@ -1,12 +1,14 @@
 package com.finances.Finances.V1.service.impl;
 
 import com.finances.Finances.V1.dto.user.UserRequest;
+import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.model.Wallet;
 import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.repository.WalletRepository;
 import com.finances.Finances.V1.service.interfaces.UserService;
+import com.finances.Finances.V1.util.UserUtil;
 import com.finances.Finances.exceptions.management.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -48,9 +50,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponse> allUsers() {
+    public List<AllUserResponse> allUsers() {
         return userRepository.findAll().stream().map(m ->{
-            UserResponse response = new UserResponse();
+            AllUserResponse response = new AllUserResponse();
             BeanUtils.copyProperties(m,response);
             return response;
         }).collect(Collectors.toList());
@@ -58,27 +60,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String,String> deleteUser(UUID userId) {
-        Optional<User> user = userRepository.findById(userId);
+        User user = UserUtil.valid(userId,userRepository);
 
-        if(user.isEmpty())
-            throw new BadRequestException("Usuário não existe");
-
-        String username = user.get().getUserName();
+        String username = user.getUserName();
         userRepository.deleteById(userId);
 
         Map<String,String> response = new HashMap<>();
         response.put("message",username + " deletado com sucesso!");
 
         return response;
-    }
-
-    @Override
-    public User valid(UUID id) {
-        Optional<User> user = userRepository.findById(id);
-
-        if(user.isEmpty())
-            throw new BadRequestException("Id do usuário inválido");
-
-        return user.get();
     }
 }

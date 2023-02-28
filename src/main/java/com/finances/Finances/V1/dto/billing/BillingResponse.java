@@ -1,6 +1,6 @@
 package com.finances.Finances.V1.dto.billing;
 
-import com.finances.Finances.V1.util.ConvertBigDecimal;
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +27,6 @@ public class BillingResponse {
     private BigDecimal value;
 
     public String getValue() {
-        return ConvertBigDecimal.convert(value);
+        return BigDecimalUtil.convert(value);
     }
 }

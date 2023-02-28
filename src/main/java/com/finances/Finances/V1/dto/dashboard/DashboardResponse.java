@@ -1,11 +1,9 @@
 package com.finances.Finances.V1.dto.dashboard;
 
 import com.finances.Finances.V1.dto.billing.BillingResponse;
+import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.dto.wallet.WalletResponse;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,10 +11,13 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class DashboardResponse {
+
+    private UserResponse user;
 
     private WalletResponse wallet;
 
-
+    private List<BillingResponse> billing;
 
 }

@@ -1,6 +1,7 @@
 package com.finances.Finances.V1.service.interfaces;
 
 import com.finances.Finances.V1.dto.user.UserRequest;
+import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.model.User;
 
@@ -12,9 +13,7 @@ public interface UserService {
 
     UserResponse create(UserRequest user);
 
-    List<UserResponse> allUsers();
+    List<AllUserResponse> allUsers();
 
     Map<String,String> deleteUser(UUID userId);
-
-    User valid(UUID id);
 }
