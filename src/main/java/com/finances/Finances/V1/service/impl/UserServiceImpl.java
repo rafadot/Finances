@@ -13,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -32,8 +33,8 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encoder.encode(user.getPassword()));
 
         Wallet wallet = Wallet.builder()
-                .currentBalance(0.00)
-                .monthlyExpense(0.00)
+                .currentBalance(new BigDecimal("0.00"))
+                .monthlyExpense(new BigDecimal("0.00"))
                 .build();
         walletRepository.save(wallet);
         user.setWallet(wallet);
