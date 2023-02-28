@@ -26,7 +26,7 @@ public class UserController {
         return new ResponseEntity<>(userService.create(userRequest), HttpStatus.CREATED);
     }
 
-    @GetMapping
+    @GetMapping("/dev")
     public ResponseEntity<List<AllUserResponse>> allUsers(){
         return new ResponseEntity<>(userService.allUsers(),HttpStatus.OK);
     }
