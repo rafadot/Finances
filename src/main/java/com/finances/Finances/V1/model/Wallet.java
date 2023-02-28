@@ -15,8 +15,6 @@ import java.util.UUID;
 @Builder
 public class Wallet {
 
-    private static final long SerialVersionUID = 1L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;

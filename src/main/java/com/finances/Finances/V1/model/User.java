@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,7 +19,6 @@ import java.util.UUID;
 @NoArgsConstructor
 @Table(name = "app_user")
 public class User {
-    private static final long SerialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,5 +42,9 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Wallet wallet;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "app_user_id")
+    private List<Billing> billing;
 
 }

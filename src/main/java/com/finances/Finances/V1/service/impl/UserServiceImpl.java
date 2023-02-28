@@ -71,4 +71,14 @@ public class UserServiceImpl implements UserService {
 
         return response;
     }
+
+    @Override
+    public User valid(UUID id) {
+        Optional<User> user = userRepository.findById(id);
+
+        if(user.isEmpty())
+            throw new BadRequestException("Id do usuário inválido");
+
+        return user.get();
+    }
 }

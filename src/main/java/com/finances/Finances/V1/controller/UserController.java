@@ -21,17 +21,17 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest userRequest){
+    public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest userRequest){
         return new ResponseEntity<>(userService.create(userRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
-    ResponseEntity<List<UserResponse>> allUsers(){
+    public ResponseEntity<List<UserResponse>> allUsers(){
         return new ResponseEntity<>(userService.allUsers(),HttpStatus.OK);
     }
 
     @DeleteMapping
-    ResponseEntity<Map<String,String>> deleteUser(@RequestParam UUID userId){
+    public ResponseEntity<Map<String,String>> deleteUser(@RequestParam UUID userId){
         return new ResponseEntity<>(userService.deleteUser(userId),HttpStatus.OK);
     }
 }
