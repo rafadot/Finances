@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,18 +26,19 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardResponse getUserDashboardLogin(User user) {
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
-        BillingResponse billingResponse = new BillingResponse();
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
 
-        if(user.getBilling().size() >= 1)
-            BeanUtils.copyProperties(NextBilling.getNextBillingList(user.getBilling()),billingResponse);
-
         return DashboardResponse.builder()
                 .user(userResponse)
                 .wallet(walletResponse)
-                .nextBilling(user.getBilling().size() >= 1 ? billingResponse : null)
+                .nextBilling(user.getBilling().size() >= 1 ? NextBilling.getNextBillingList(user.getBilling()).stream()
+                        .map(m ->{
+                            BillingResponse response = new BillingResponse();
+                            BeanUtils.copyProperties(m,response);
+                            return response;
+                        }).collect(Collectors.toList()) : null)
                 .build();
     }
 
@@ -51,13 +53,15 @@ public class DashboardServiceImpl implements DashboardService {
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
 
-        if(user.getBilling().size() >= 1)
-            BeanUtils.copyProperties(NextBilling.getNextBillingList(user.getBilling()),billingResponse);
-
         return DashboardResponse.builder()
                 .user(userResponse)
                 .wallet(walletResponse)
-                .nextBilling(user.getBilling().size() >= 1 ? billingResponse : null)
+                .nextBilling(user.getBilling().size() >= 1 ? NextBilling.getNextBillingList(user.getBilling()).stream()
+                        .map(m ->{
+                            BillingResponse response = new BillingResponse();
+                            BeanUtils.copyProperties(m,response);
+                            return response;
+                        }).collect(Collectors.toList()) : null)
                 .build();
     }
 }

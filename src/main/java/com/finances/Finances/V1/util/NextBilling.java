@@ -4,10 +4,11 @@ import com.finances.Finances.V1.model.Billing;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 public class NextBilling {
-    public static Billing getNextBillingList(List<Billing> billingList){
+    public static List<Billing> getNextBillingList(List<Billing> billingList){
         Billing nextBilling = new Billing();
         LocalDate today = LocalDate.now();
         long minDifference = Long.MAX_VALUE;
@@ -20,6 +21,14 @@ public class NextBilling {
                 nextBilling = billing;
             }
         }
-        return nextBilling;
+
+        List<Billing> response = new ArrayList<>();
+
+        for(Billing billing : billingList){
+            if(billing.getDate().equals(nextBilling.getDate()))
+                response.add(billing);
+        }
+
+        return response;
     }
 }

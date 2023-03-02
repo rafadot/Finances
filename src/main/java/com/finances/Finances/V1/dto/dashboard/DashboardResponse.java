@@ -5,6 +5,8 @@ import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.dto.wallet.WalletResponse;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -16,6 +18,6 @@ public class DashboardResponse {
 
     private WalletResponse wallet;
 
-    private BillingResponse nextBilling;
+    private List<BillingResponse> nextBilling;
 
 }
