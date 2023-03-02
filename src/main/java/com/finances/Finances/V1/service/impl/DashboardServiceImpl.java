@@ -2,6 +2,8 @@ package com.finances.Finances.V1.service.impl;
 
 import com.finances.Finances.V1.dto.billing.BillingResponse;
 import com.finances.Finances.V1.dto.dashboard.DashboardResponse;
+import com.finances.Finances.V1.dto.spent.SpentResponse;
+import com.finances.Finances.V1.dto.type_spent.TypeSpentResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.dto.wallet.WalletResponse;
 import com.finances.Finances.V1.model.User;
@@ -13,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,12 +37,33 @@ public class DashboardServiceImpl implements DashboardService {
         return DashboardResponse.builder()
                 .user(userResponse)
                 .wallet(walletResponse)
-                .nextBilling(user.getBilling().size() >= 1 ? NextBilling.getNextBillingList(user.getBilling()).stream()
-                        .map(m ->{
-                            BillingResponse response = new BillingResponse();
-                            BeanUtils.copyProperties(m,response);
-                            return response;
-                        }).collect(Collectors.toList()) : null)
+                .nextBilling(user.getBilling().size() > 0 ?
+                        NextBilling.getNextBillingList(user.getBilling())
+                                .stream()
+                                .map(m ->{
+                                    BillingResponse response = new BillingResponse();
+                                    BeanUtils.copyProperties(m,response);
+                                    return response;
+                                }).collect(Collectors.toList())
+                        :
+                        null
+                )
+                .typeSpent(user.getTypeSpentList().size() > 0 ?
+                                user.getTypeSpentList()
+                                        .stream()
+                                        .map(m ->{
+                                            TypeSpentResponse response = new TypeSpentResponse();
+                                            BeanUtils.copyProperties(m,response);
+                                            response.setSpentList(m.getSpentList().stream().map(spent -> {
+                                                SpentResponse spentResponse = new SpentResponse();
+                                                BeanUtils.copyProperties(spent,spentResponse);
+                                                return spentResponse;
+                                            }).collect(Collectors.toList()));
+                                            return response;
+                                        }).collect(Collectors.toList())
+                                :
+                                null
+                        )
                 .build();
     }
 
@@ -48,7 +73,6 @@ public class DashboardServiceImpl implements DashboardService {
 
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
-        BillingResponse billingResponse = new BillingResponse();
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
@@ -56,12 +80,28 @@ public class DashboardServiceImpl implements DashboardService {
         return DashboardResponse.builder()
                 .user(userResponse)
                 .wallet(walletResponse)
-                .nextBilling(user.getBilling().size() >= 1 ? NextBilling.getNextBillingList(user.getBilling()).stream()
-                        .map(m ->{
-                            BillingResponse response = new BillingResponse();
-                            BeanUtils.copyProperties(m,response);
-                            return response;
-                        }).collect(Collectors.toList()) : null)
+                .nextBilling(user.getBilling().size() > 0 ?
+                        NextBilling.getNextBillingList(user.getBilling())
+                                .stream()
+                                .map(m ->{
+                                    BillingResponse response = new BillingResponse();
+                                    BeanUtils.copyProperties(m,response);
+                                    return response;
+                                }).collect(Collectors.toList())
+                        :
+                        null
+                )
+                .typeSpent(user.getTypeSpentList().size() > 0 ?
+                        user.getTypeSpentList()
+                                .stream()
+                                .map(m ->{
+                                    TypeSpentResponse response = new TypeSpentResponse();
+                                    BeanUtils.copyProperties(m,response);
+                                    return response;
+                                }).collect(Collectors.toList())
+                        :
+                        null
+                )
                 .build();
     }
 }

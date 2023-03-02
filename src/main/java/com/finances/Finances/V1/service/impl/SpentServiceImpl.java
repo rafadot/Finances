@@ -42,9 +42,11 @@ public class SpentServiceImpl implements SpentService {
 
                 Spent spent = new Spent();
                 BeanUtils.copyProperties(request,spent);
+                spent.setTypeName(typeName);
                 spentRepository.save(spent);
 
                 t.getSpentList().add(spent);
+                t.setTotalSpent(t.getTotalSpent().add(spent.getValue()));
                 typeSpentRepository.save(t);
 
                 SpentResponse response = new SpentResponse();

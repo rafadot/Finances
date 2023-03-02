@@ -26,6 +26,8 @@ public class SpentResponse {
 
     private LocalDate date;
 
+    private String typeName;
+
     public String getValue() {
         return BigDecimalUtil.convert(value);
     }

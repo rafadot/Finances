@@ -31,4 +31,6 @@ public class Spent {
     private String description;
 
     private LocalDate date;
+
+    private String typeName;
 }

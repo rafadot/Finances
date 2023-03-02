@@ -14,6 +14,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -46,4 +47,10 @@ public class TypeSpentServiceImpl implements TypeSpentService {
 
         return response;
     }
+
+    @Override
+    public List<TypeSpentResponse> listTypeSpent(UUID userId) {
+        return null;
+    }
+
 }
