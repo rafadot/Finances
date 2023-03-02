@@ -3,8 +3,11 @@ package com.finances.Finances.V1.service.impl;
 import com.finances.Finances.V1.dto.user.UserRequest;
 import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
+import com.finances.Finances.V1.model.TypeSpent;
 import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.model.Wallet;
+import com.finances.Finances.V1.model.enums.TypeSpentColor;
+import com.finances.Finances.V1.repository.TypeSpentRepository;
 import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.repository.WalletRepository;
 import com.finances.Finances.V1.service.interfaces.UserService;
@@ -25,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final WalletRepository walletRepository;
+    private final TypeSpentRepository typeSpentRepository;
     private final PasswordEncoder encoder;
 
     @Override
@@ -50,6 +54,14 @@ public class UserServiceImpl implements UserService {
                 .build();
         walletRepository.save(wallet);
         user.setWallet(wallet);
+
+        TypeSpent typeSpent = TypeSpent.builder()
+                .name("Outros gastos")
+                .color(TypeSpentColor.WHITE)
+                .totalSpent(new BigDecimal(0))
+                .build();
+        typeSpentRepository.save(typeSpent);
+        user.getTypeSpentList().add(typeSpent);
 
         userRepository.save(user);
 

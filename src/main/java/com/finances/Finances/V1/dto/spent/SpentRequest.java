@@ -1,4 +1,4 @@
-package com.finances.Finances.V1.dto.billing;
+package com.finances.Finances.V1.dto.spent;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,17 +13,14 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BillingRequest {
-
-    @NotNull
-    private String title;
-
-    private String description;
-
-    @NotNull
-    private LocalDate date;
+public class SpentRequest {
 
     @NotNull
     private BigDecimal value;
 
+    private String title;
+
+    private String description;
+
+    private LocalDate date;
 }

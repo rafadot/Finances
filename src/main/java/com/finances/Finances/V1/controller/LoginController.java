@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/login")
@@ -16,7 +18,7 @@ public class LoginController {
     private final LoginService loginService;
 
     @PostMapping
-    public ResponseEntity<DashboardResponse> login(@RequestBody Login login){
+    public ResponseEntity<DashboardResponse> login(@RequestBody @Valid Login login){
         return new ResponseEntity<>(loginService.login(login), HttpStatus.OK);
     }
 

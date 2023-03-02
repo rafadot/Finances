@@ -9,6 +9,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -46,5 +47,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "app_user_id")
     private List<Billing> billing;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "app_user_id")
+    private List<TypeSpent> typeSpentList = new ArrayList<>();
 
 }

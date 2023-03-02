@@ -25,9 +25,9 @@ public class LoginServiceImpl implements LoginService {
     public DashboardResponse login(Login login) {
         Optional<User> user = userRepository.findByEmail(login.getEmailOrUsername());
 
-        if(user.isEmpty()){
+        if(!user.isPresent()){
             user = userRepository.findByUserName(login.getEmailOrUsername());
-            if(user.isEmpty())
+            if(!user.isPresent())
                 throw new BadRequestException("Email ou nome de usuário invalido");
         }
 

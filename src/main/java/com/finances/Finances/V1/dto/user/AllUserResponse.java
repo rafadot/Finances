@@ -1,6 +1,7 @@
 package com.finances.Finances.V1.dto.user;
 
 import com.finances.Finances.V1.model.Billing;
+import com.finances.Finances.V1.model.TypeSpent;
 import com.finances.Finances.V1.model.Wallet;
 import com.finances.Finances.V1.model.enums.Sex;
 import lombok.AllArgsConstructor;
@@ -40,4 +41,6 @@ public class AllUserResponse {
     private Wallet wallet;
 
     private List<Billing> billing;
+
+    private List<TypeSpent> typeSpentList;
 }

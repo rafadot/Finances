@@ -1,29 +1,32 @@
-package com.finances.Finances.V1.dto.billing;
+package com.finances.Finances.V1.dto.spent;
 
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class BillingRequest {
+public class SpentResponse {
 
-    @NotNull
+    UUID id;
+
+    private BigDecimal value;
+
     private String title;
 
     private String description;
 
-    @NotNull
     private LocalDate date;
 
-    @NotNull
-    private BigDecimal value;
-
+    public String getValue() {
+        return BigDecimalUtil.convert(value);
+    }
 }

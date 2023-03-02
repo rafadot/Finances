@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.Map;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ public class BillingController {
     private final BillingService billingService;
 
     @PostMapping
-    public ResponseEntity<BillingResponse> create(@RequestParam UUID userId, @RequestBody BillingRequest billingRequest){
+    public ResponseEntity<BillingResponse> create(@RequestParam UUID userId, @RequestBody @Valid BillingRequest billingRequest){
         return new ResponseEntity<>(billingService.create(userId,billingRequest), HttpStatus.CREATED);
     }
 

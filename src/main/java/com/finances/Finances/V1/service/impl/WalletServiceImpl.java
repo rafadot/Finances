@@ -23,7 +23,7 @@ public class WalletServiceImpl implements WalletService {
     public WalletResponse patchWallet(UUID walletId, WalletRequest walletRequest) {
         Optional<Wallet> optWallet = walletRepository.findById(walletId);
 
-        if(optWallet.isEmpty())
+        if(!optWallet.isPresent())
             throw new BadRequestException("Id da carteira incorreto");
 
         Wallet wallet = Wallet.builder()

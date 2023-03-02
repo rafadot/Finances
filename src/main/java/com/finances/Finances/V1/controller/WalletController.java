@@ -19,7 +19,7 @@ public class WalletController {
     private final WalletService walletService;
 
     @PatchMapping
-    public ResponseEntity<WalletResponse> patchWallet(@RequestParam UUID walletId, @RequestBody @Valid WalletRequest walletRequest){
+    public ResponseEntity<WalletResponse> patchWallet(@RequestParam UUID walletId, @RequestBody WalletRequest walletRequest){
         return new ResponseEntity<>(walletService.patchWallet(walletId,walletRequest), HttpStatus.OK);
     }
 }

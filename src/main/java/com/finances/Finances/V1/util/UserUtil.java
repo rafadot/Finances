@@ -13,7 +13,7 @@ public class UserUtil {
     public static User valid(UUID id, UserRepository userRepository){
         Optional<User> user = userRepository.findById(id);
 
-        if(user.isEmpty())
+        if(!user.isPresent())
             throw new BadRequestException("Id do usuário inválido");
 
         return user.get();
