@@ -1,8 +1,11 @@
 package com.finances.Finances.V1.controller;
 
+import com.finances.Finances.V1.dto.dashboard.DashboardResponse;
 import com.finances.Finances.V1.dto.user.UserRequest;
 import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
+import com.finances.Finances.V1.model.User;
+import com.finances.Finances.V1.service.interfaces.DashboardService;
 import com.finances.Finances.V1.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
+    private final DashboardService dashboardService;
 
     @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UserRequest userRequest){
@@ -34,5 +38,10 @@ public class UserController {
     @DeleteMapping
     public ResponseEntity<Map<String,String>> deleteUser(@RequestParam UUID userId){
         return new ResponseEntity<>(userService.deleteUser(userId),HttpStatus.OK);
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<DashboardResponse> getUserDashboard(@RequestParam UUID userID){
+        return new ResponseEntity<>(dashboardService.getUserDashboard(userID), HttpStatus.OK);
     }
 }
