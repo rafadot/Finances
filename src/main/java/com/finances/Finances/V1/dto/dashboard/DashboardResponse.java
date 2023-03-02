@@ -23,4 +23,6 @@ public class DashboardResponse {
 
     private List<TypeSpentResponse> typeSpent;
 
+    private List<String> graphicLine;
+
 }

@@ -9,12 +9,14 @@ import com.finances.Finances.V1.dto.wallet.WalletResponse;
 import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.service.interfaces.DashboardService;
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import com.finances.Finances.V1.util.NextBilling;
 import com.finances.Finances.V1.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +32,7 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardResponse getUserDashboardLogin(User user) {
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
+        List<BigDecimal> typeSpentValue = new ArrayList<>();
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
@@ -54,6 +57,7 @@ public class DashboardServiceImpl implements DashboardService {
                                         .map(m ->{
                                             TypeSpentResponse response = new TypeSpentResponse();
                                             BeanUtils.copyProperties(m,response);
+                                            typeSpentValue.add(m.getTotalSpent());
                                             response.setSpentList(m.getSpentList().stream().map(spent -> {
                                                 SpentResponse spentResponse = new SpentResponse();
                                                 BeanUtils.copyProperties(spent,spentResponse);
@@ -64,6 +68,7 @@ public class DashboardServiceImpl implements DashboardService {
                                 :
                                 null
                         )
+                .graphicLine(BigDecimalUtil.graphicLineCalculate(typeSpentValue))
                 .build();
     }
 
