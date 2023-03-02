@@ -29,6 +29,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponse create(UserRequest userRequest) {
+        Optional<User> userEmail = userRepository.findByEmail(userRequest.getEmail());
+
+        if(userEmail.isPresent())
+            throw new BadRequestException("E-mail já cadastrado");
+
+        Optional<User> userUserName = userRepository.findByUserName(userRequest.getUserName());
+
+        if(userUserName.isPresent())
+            throw new BadRequestException("Nome de usuário já existe");
+
         User user = new User();
 
         BeanUtils.copyProperties(userRequest,user);
