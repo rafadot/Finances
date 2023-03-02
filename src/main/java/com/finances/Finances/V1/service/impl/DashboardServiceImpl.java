@@ -78,6 +78,7 @@ public class DashboardServiceImpl implements DashboardService {
 
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
+        List<BigDecimal> typeSpentValue = new ArrayList<>();
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
@@ -102,11 +103,18 @@ public class DashboardServiceImpl implements DashboardService {
                                 .map(m ->{
                                     TypeSpentResponse response = new TypeSpentResponse();
                                     BeanUtils.copyProperties(m,response);
+                                    typeSpentValue.add(m.getTotalSpent());
+                                    response.setSpentList(m.getSpentList().stream().map(spent -> {
+                                        SpentResponse spentResponse = new SpentResponse();
+                                        BeanUtils.copyProperties(spent,spentResponse);
+                                        return spentResponse;
+                                    }).collect(Collectors.toList()));
                                     return response;
                                 }).collect(Collectors.toList())
                         :
                         null
                 )
+                .graphicLine(BigDecimalUtil.graphicLineCalculate(typeSpentValue))
                 .build();
     }
 }
