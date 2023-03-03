@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -29,10 +30,14 @@ public class SpentServiceImpl implements SpentService {
 
     @Override
     public SpentResponse create(UUID userId, String typeName, SpentRequest request) {
-        User user = UserUtil.valid(userId,userRepository);
+
+        if(request.getValue().compareTo(new BigDecimal(0)) == 0)
+            throw new BadRequestException("Por favor digite um valor maior que R$ 0,00");
 
         if(typeName.equals(""))
             typeName = "Outros gastos";
+
+        User user = UserUtil.valid(userId,userRepository);
 
         for(TypeSpent t : user.getTypeSpentList()){
             if(t.getName().equals(typeName)){

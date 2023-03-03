@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NextBilling {
+public class DatesUtil {
     public static List<Billing> getNextBillingList(List<Billing> billingList){
         Billing nextBilling = new Billing();
         LocalDate today = LocalDate.now();

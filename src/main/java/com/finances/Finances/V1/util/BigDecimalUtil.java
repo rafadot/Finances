@@ -1,5 +1,7 @@
 package com.finances.Finances.V1.util;
 
+import com.finances.Finances.V1.model.TypeSpent;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -13,13 +15,16 @@ public class BigDecimalUtil {
         return decimalFormat.format(bigDecimal);
     }
 
-    public static List<String> graphicLineCalculate(List<BigDecimal> typeSpentValueList){
+    public static List<String> graphicLineCalculate(List<TypeSpent> typeSpentValueList){
         BigDecimal maxValue = new BigDecimal(0);
 
-        for(BigDecimal type : typeSpentValueList){
-            if(type.compareTo(maxValue) > 0)
-                maxValue = type;
+        for(TypeSpent type : typeSpentValueList){
+            if(type.getTotalSpent().compareTo(maxValue) > 0)
+                maxValue = type.getTotalSpent();
         }
+
+        if(maxValue.compareTo(new BigDecimal(0)) == 0)
+            return null;
 
         ArrayList<String> response = new ArrayList<>();
         response.add(BigDecimalUtil.convert(maxValue));

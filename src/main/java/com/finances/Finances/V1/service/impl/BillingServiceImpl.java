@@ -9,10 +9,12 @@ import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.service.interfaces.BillingService;
 import com.finances.Finances.V1.service.interfaces.UserService;
 import com.finances.Finances.V1.util.UserUtil;
+import com.finances.Finances.exceptions.management.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -28,6 +30,9 @@ public class BillingServiceImpl implements BillingService {
 
     @Override
     public BillingResponse create(UUID userId, BillingRequest billingRequest) {
+        if(billingRequest.getValue().compareTo(new BigDecimal(0)) == 0)
+            throw new BadRequestException("Por favor digite um valor maior que R$ 0,00");
+
         User user = UserUtil.valid(userId,userRepository);
 
         Billing billing = new Billing();

@@ -10,15 +10,15 @@ import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.service.interfaces.DashboardService;
 import com.finances.Finances.V1.util.BigDecimalUtil;
-import com.finances.Finances.V1.util.NextBilling;
+import com.finances.Finances.V1.util.DatesUtil;
 import com.finances.Finances.V1.util.UserUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -32,7 +32,6 @@ public class DashboardServiceImpl implements DashboardService {
     public DashboardResponse getUserDashboardLogin(User user) {
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
-        List<BigDecimal> typeSpentValue = new ArrayList<>();
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
@@ -41,7 +40,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .user(userResponse)
                 .wallet(walletResponse)
                 .nextBilling(user.getBilling().size() > 0 ?
-                        NextBilling.getNextBillingList(user.getBilling())
+                        DatesUtil.getNextBillingList(user.getBilling())
                                 .stream()
                                 .map(m ->{
                                     BillingResponse response = new BillingResponse();
@@ -54,21 +53,28 @@ public class DashboardServiceImpl implements DashboardService {
                 .typeSpent(user.getTypeSpentList().size() > 0 ?
                                 user.getTypeSpentList()
                                         .stream()
+                                        .filter(typeSpent -> typeSpent.getTotalSpent().compareTo(new BigDecimal(0)) > 0)
                                         .map(m ->{
                                             TypeSpentResponse response = new TypeSpentResponse();
                                             BeanUtils.copyProperties(m,response);
-                                            typeSpentValue.add(m.getTotalSpent());
-                                            response.setSpentList(m.getSpentList().stream().map(spent -> {
-                                                SpentResponse spentResponse = new SpentResponse();
-                                                BeanUtils.copyProperties(spent,spentResponse);
-                                                return spentResponse;
-                                            }).collect(Collectors.toList()));
+
+                                            BigDecimal newTotalSpent = new BigDecimal(0);
+                                            response.setSpentList(m.getSpentList().stream()
+                                                    .filter(spent -> ChronoUnit.MONTHS.between(LocalDate.now(),spent.getDate()) < 1)
+                                                    .map(spent -> {
+                                                        m.setTotalSpent(newTotalSpent.add(new BigDecimal(spent.getValue().toString())));
+                                                        SpentResponse spentResponse = new SpentResponse();
+                                                        BeanUtils.copyProperties(spent,spentResponse);
+                                                        return spentResponse;
+                                                    }).collect(Collectors.toList()));
+
+                                            response.setTotalSpent(m.getTotalSpent());
                                             return response;
                                         }).collect(Collectors.toList())
                                 :
                                 null
                         )
-                .graphicLine(BigDecimalUtil.graphicLineCalculate(typeSpentValue))
+                .graphicLine(BigDecimalUtil.graphicLineCalculate(user.getTypeSpentList()))
                 .build();
     }
 
@@ -78,7 +84,6 @@ public class DashboardServiceImpl implements DashboardService {
 
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
-        List<BigDecimal> typeSpentValue = new ArrayList<>();
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
@@ -87,7 +92,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .user(userResponse)
                 .wallet(walletResponse)
                 .nextBilling(user.getBilling().size() > 0 ?
-                        NextBilling.getNextBillingList(user.getBilling())
+                        DatesUtil.getNextBillingList(user.getBilling())
                                 .stream()
                                 .map(m ->{
                                     BillingResponse response = new BillingResponse();
@@ -100,21 +105,28 @@ public class DashboardServiceImpl implements DashboardService {
                 .typeSpent(user.getTypeSpentList().size() > 0 ?
                         user.getTypeSpentList()
                                 .stream()
+                                .filter(typeSpent -> typeSpent.getTotalSpent().compareTo(new BigDecimal(0)) > 0)
                                 .map(m ->{
                                     TypeSpentResponse response = new TypeSpentResponse();
                                     BeanUtils.copyProperties(m,response);
-                                    typeSpentValue.add(m.getTotalSpent());
-                                    response.setSpentList(m.getSpentList().stream().map(spent -> {
-                                        SpentResponse spentResponse = new SpentResponse();
-                                        BeanUtils.copyProperties(spent,spentResponse);
-                                        return spentResponse;
-                                    }).collect(Collectors.toList()));
+
+                                    BigDecimal newTotalSpent = new BigDecimal(0);
+                                    response.setSpentList(m.getSpentList().stream()
+                                            .filter(spent -> ChronoUnit.MONTHS.between(LocalDate.now(),spent.getDate()) < 1)
+                                            .map(spent -> {
+                                                m.setTotalSpent(newTotalSpent.add(new BigDecimal(spent.getValue().toString())));
+                                                SpentResponse spentResponse = new SpentResponse();
+                                                BeanUtils.copyProperties(spent,spentResponse);
+                                                return spentResponse;
+                                            }).collect(Collectors.toList()));
+
+                                    response.setTotalSpent(m.getTotalSpent());
                                     return response;
                                 }).collect(Collectors.toList())
                         :
                         null
                 )
-                .graphicLine(BigDecimalUtil.graphicLineCalculate(typeSpentValue))
+                .graphicLine(BigDecimalUtil.graphicLineCalculate(user.getTypeSpentList()))
                 .build();
     }
 }
