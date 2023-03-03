@@ -1,6 +1,7 @@
 package com.finances.Finances.V1.dto.dashboard;
 
 import com.finances.Finances.V1.dto.billing.BillingResponse;
+import com.finances.Finances.V1.dto.type_spent.GraphicTypeSpent;
 import com.finances.Finances.V1.dto.type_spent.TypeSpentResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.dto.wallet.WalletResponse;
@@ -21,7 +22,7 @@ public class DashboardResponse {
 
     private List<BillingResponse> nextBilling;
 
-    private List<TypeSpentResponse> typeSpent;
+    private List<GraphicTypeSpent> typeSpent;
 
     private List<String> graphicLine;
 
