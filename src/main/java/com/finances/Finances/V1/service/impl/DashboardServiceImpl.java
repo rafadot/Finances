@@ -97,11 +97,12 @@ public class DashboardServiceImpl implements DashboardService {
 
         UserResponse userResponse = new UserResponse();
         WalletResponse walletResponse = new WalletResponse();
+        final BigDecimal[] maxValue = {new BigDecimal(0)};
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
 
-        return DashboardResponse.builder()
+        DashboardResponse dashboardResponse = DashboardResponse.builder()
                 .user(userResponse)
                 .wallet(walletResponse)
                 .nextBilling(user.getBilling().size() > 0 ?
@@ -123,23 +124,35 @@ public class DashboardServiceImpl implements DashboardService {
                                     GraphicTypeSpent response = new GraphicTypeSpent();
                                     BeanUtils.copyProperties(m,response);
 
-                                    BigDecimal newTotalSpent = new BigDecimal(0);
+                                    BigDecimal[] newTotalSpent = {new BigDecimal(0)};
                                     response.setSpentList(m.getSpentList().stream()
-                                            .filter(spent -> ChronoUnit.MONTHS.between(LocalDate.now(),spent.getDate()) < 1)
+                                            .filter(spent -> ChronoUnit.MONTHS.between(spent.getDate(),LocalDate.now()) < 1)
                                             .map(spent -> {
-                                                m.setTotalSpent(newTotalSpent.add(new BigDecimal(spent.getValue().toString())));
+                                                newTotalSpent[0] = newTotalSpent[0].add(spent.getValue());
                                                 SpentResponse spentResponse = new SpentResponse();
                                                 BeanUtils.copyProperties(spent,spentResponse);
                                                 return spentResponse;
                                             }).collect(Collectors.toList()));
 
-                                    response.setTotalSpent(m.getTotalSpent());
+                                    if(newTotalSpent[0].compareTo(maxValue[0]) > 0)
+                                        maxValue[0] = newTotalSpent[0];
+
+                                    response.setTotalSpent(newTotalSpent[0]);
                                     return response;
-                                }).collect(Collectors.toList())
+                                })
+                                .collect(Collectors.toList())
                         :
                         null
                 )
                 .graphicLine(BigDecimalUtil.graphicLineCalculate(user.getTypeSpentList()))
                 .build();
+
+        dashboardResponse.getTypeSpent().stream()
+                .peek(colum ->{
+                    double value = Double.parseDouble(colum.getTotalSpent().replace(",","."));
+                    colum.setColumPercentage((100*value)/(maxValue[0].doubleValue()));
+                }).collect(Collectors.toList());
+
+        return dashboardResponse;
     }
 }
