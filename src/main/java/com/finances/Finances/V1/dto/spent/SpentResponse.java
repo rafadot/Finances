@@ -29,6 +29,6 @@ public class SpentResponse {
     private String typeName;
 
     public String getValue() {
-        return BigDecimalUtil.convert(value);
+        return BigDecimalUtil.bigDecimalToReal(value);
     }
 }

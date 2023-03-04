@@ -1,5 +1,6 @@
 package com.finances.Finances.V1.dto.billing;
 
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,6 +25,9 @@ public class BillingRequest {
     private LocalDate date;
 
     @NotNull
-    private BigDecimal value;
+    private String value;
 
+    public BigDecimal getValue() {
+        return BigDecimalUtil.realToBigDecimal(value);
+    }
 }

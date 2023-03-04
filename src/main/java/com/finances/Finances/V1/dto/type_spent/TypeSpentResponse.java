@@ -31,6 +31,6 @@ public class TypeSpentResponse {
     private List<SpentResponse> spentList;
 
     public String getTotalSpent() {
-        return BigDecimalUtil.convert(totalSpent);
+        return BigDecimalUtil.bigDecimalToReal(totalSpent);
     }
 }

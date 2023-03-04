@@ -1,5 +1,6 @@
 package com.finances.Finances.V1.dto.spent;
 
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,15 @@ import java.time.LocalDate;
 public class SpentRequest {
 
     @NotNull
-    private BigDecimal value;
+    private String value;
 
     private String title;
 
     private String description;
 
     private LocalDate date;
+
+    public BigDecimal getValue() {
+        return BigDecimalUtil.realToBigDecimal(value);
+    }
 }

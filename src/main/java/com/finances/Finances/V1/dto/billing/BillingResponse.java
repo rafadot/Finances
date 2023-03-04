@@ -27,6 +27,6 @@ public class BillingResponse {
     private BigDecimal value;
 
     public String getValue() {
-        return BigDecimalUtil.convert(value);
+        return BigDecimalUtil.bigDecimalToReal(value);
     }
 }

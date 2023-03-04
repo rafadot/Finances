@@ -22,10 +22,10 @@ public class WalletResponse {
     private BigDecimal monthlyExpense;
 
     public String getCurrentBalance() {
-        return BigDecimalUtil.convert(currentBalance);
+        return BigDecimalUtil.bigDecimalToReal(currentBalance);
     }
 
     public String getMonthlyExpense() {
-        return BigDecimalUtil.convert(monthlyExpense);
+        return BigDecimalUtil.bigDecimalToReal(monthlyExpense);
     }
 }

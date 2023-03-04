@@ -1,5 +1,6 @@
 package com.finances.Finances.V1.dto.wallet;
 
+import com.finances.Finances.V1.util.BigDecimalUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,16 @@ import java.math.BigDecimal;
 public class WalletRequest {
 
     @NotNull
-    private BigDecimal currentBalance;
+    private String currentBalance;
 
     @NotNull
-    private BigDecimal monthlyExpense;
+    private String monthlyExpense;
+
+    public BigDecimal getCurrentBalance() {
+        return BigDecimalUtil.realToBigDecimal(currentBalance);
+    }
+
+    public BigDecimal getMonthlyExpense() {
+        return BigDecimalUtil.realToBigDecimal(monthlyExpense);
+    }
 }

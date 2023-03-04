@@ -34,6 +34,6 @@ public class GraphicTypeSpent {
     private Double columPercentage;
 
     public String getTotalSpent() {
-        return BigDecimalUtil.convert(totalSpent);
+        return BigDecimalUtil.bigDecimalToReal(totalSpent);
     }
 }
