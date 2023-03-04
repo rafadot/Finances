@@ -8,6 +8,7 @@ import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.repository.SpentRepository;
 import com.finances.Finances.V1.repository.TypeSpentRepository;
 import com.finances.Finances.V1.repository.UserRepository;
+import com.finances.Finances.V1.repository.WalletRepository;
 import com.finances.Finances.V1.service.interfaces.SpentService;
 import com.finances.Finances.V1.util.UserUtil;
 import com.finances.Finances.exceptions.management.BadRequestException;
@@ -26,7 +27,6 @@ public class SpentServiceImpl implements SpentService {
     private final SpentRepository spentRepository;
     private final UserRepository userRepository;
     private final TypeSpentRepository typeSpentRepository;
-
 
     @Override
     public SpentResponse create(UUID userId, String typeName, SpentRequest request) {
@@ -53,6 +53,9 @@ public class SpentServiceImpl implements SpentService {
                 t.getSpentList().add(spent);
                 t.setTotalSpent(t.getTotalSpent().add(spent.getValue()));
                 typeSpentRepository.save(t);
+
+                user.getWallet().setMonthlyExpense(user.getWallet().getMonthlyExpense().add(spent.getValue()));
+                userRepository.save(user);
 
                 SpentResponse response = new SpentResponse();
                 BeanUtils.copyProperties(spent,response);

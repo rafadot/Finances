@@ -37,13 +37,13 @@ public class DashboardServiceImpl implements DashboardService {
         WalletResponse walletResponse = new WalletResponse();
         final BigDecimal[] maxValueForColum = {new BigDecimal(0)};
         final BigDecimal[] maxValueForLine = {new BigDecimal(0)};
+        final BigDecimal[] monthlyExpense = {new BigDecimal(0)};
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
 
         DashboardResponse dashboardResponse = DashboardResponse.builder()
                 .user(userResponse)
-                .wallet(walletResponse)
                 .nextBilling(user.getBilling().size() > 0 ?
                         DatesUtil.getNextBillingList(user.getBilling())
                                 .stream()
@@ -81,6 +81,8 @@ public class DashboardServiceImpl implements DashboardService {
                                     if(maxValueForLine[0].compareTo(new BigDecimal(response.getTotalSpent().replace(",","."))) < 0)
                                         maxValueForLine[0] = new BigDecimal(response.getTotalSpent().replace(",","."));
 
+                                    monthlyExpense[0] = monthlyExpense[0].add(new BigDecimal(response.getTotalSpent().replace(",",".")));
+
                                     return response;
                                 })
                                 .collect(Collectors.toList())
@@ -96,6 +98,9 @@ public class DashboardServiceImpl implements DashboardService {
                 }).collect(Collectors.toList());
 
         dashboardResponse.setGraphicLine(BigDecimalUtil.graphicLines(maxValueForLine[0]));
+
+        walletResponse.setMonthlyExpense(monthlyExpense[0]);
+        dashboardResponse.setWallet(walletResponse);
 
         return dashboardResponse;
     }
