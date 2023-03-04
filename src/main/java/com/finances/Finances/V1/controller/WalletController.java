@@ -18,8 +18,8 @@ public class WalletController {
 
     private final WalletService walletService;
 
-    @PatchMapping
-    public ResponseEntity<WalletResponse> patchWallet(@RequestParam UUID walletId, @RequestBody WalletRequest walletRequest){
-        return new ResponseEntity<>(walletService.patchWallet(walletId,walletRequest), HttpStatus.OK);
+    @PatchMapping("/currentBalance")
+    public ResponseEntity<WalletResponse> patchCurrentBalance(@RequestParam UUID userId, @RequestParam String value){
+        return new ResponseEntity<>(walletService.patchCurrentBalance(userId,value), HttpStatus.OK);
     }
 }

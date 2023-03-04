@@ -2,9 +2,13 @@ package com.finances.Finances.V1.service.impl;
 
 import com.finances.Finances.V1.dto.wallet.WalletRequest;
 import com.finances.Finances.V1.dto.wallet.WalletResponse;
+import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.model.Wallet;
+import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.repository.WalletRepository;
 import com.finances.Finances.V1.service.interfaces.WalletService;
+import com.finances.Finances.V1.util.BigDecimalUtil;
+import com.finances.Finances.V1.util.UserUtil;
 import com.finances.Finances.exceptions.management.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
@@ -18,20 +22,14 @@ import java.util.UUID;
 public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
+    private final UserRepository userRepository;
 
     @Override
-    public WalletResponse patchWallet(UUID walletId, WalletRequest walletRequest) {
-        Optional<Wallet> optWallet = walletRepository.findById(walletId);
+    public WalletResponse patchCurrentBalance(UUID userId, String value) {
+        User user = UserUtil.valid(userId,userRepository);
+        Wallet wallet = user.getWallet();
 
-        if(!optWallet.isPresent())
-            throw new BadRequestException("Id da carteira incorreto");
-
-        Wallet wallet = Wallet.builder()
-                .id(optWallet.get().getId())
-                .currentBalance(walletRequest.getCurrentBalance() == null ? optWallet.get().getCurrentBalance() : walletRequest.getCurrentBalance())
-                .monthlyExpense(walletRequest.getMonthlyExpense() == null ? optWallet.get().getMonthlyExpense() : walletRequest.getMonthlyExpense())
-                .build();
-
+        wallet.setCurrentBalance(BigDecimalUtil.realToBigDecimal(value));
         walletRepository.save(wallet);
 
         WalletResponse response = new WalletResponse();

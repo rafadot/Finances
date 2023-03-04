@@ -30,7 +30,7 @@ public class TypeSpentServiceImpl implements TypeSpentService {
         User user = UserUtil.valid(userid, userRepository);
 
         for(TypeSpent typeSpent : user.getTypeSpentList()){
-            if(typeSpent.getName().equals(request.getName()))
+            if(typeSpent.getName().equalsIgnoreCase(request.getName()))
                 throw new BadRequestException("Esse nome já foi atribuido a um tipo de gasto");
         }
 

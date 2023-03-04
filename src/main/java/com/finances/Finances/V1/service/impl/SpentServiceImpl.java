@@ -40,7 +40,7 @@ public class SpentServiceImpl implements SpentService {
         User user = UserUtil.valid(userId,userRepository);
 
         for(TypeSpent t : user.getTypeSpentList()){
-            if(t.getName().equals(typeName)){
+            if(t.getName().equalsIgnoreCase(typeName)){
 
                 if(request.getDate() == null)
                     request.setDate(LocalDate.now());

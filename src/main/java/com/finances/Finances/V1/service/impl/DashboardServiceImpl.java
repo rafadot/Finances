@@ -6,7 +6,6 @@ import com.finances.Finances.V1.dto.spent.SpentResponse;
 import com.finances.Finances.V1.dto.type_spent.GraphicTypeSpent;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.dto.wallet.WalletResponse;
-import com.finances.Finances.V1.model.TypeSpent;
 import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.service.interfaces.DashboardService;
@@ -20,8 +19,6 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
