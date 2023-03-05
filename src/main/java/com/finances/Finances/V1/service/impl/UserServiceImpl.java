@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
 
         TypeSpent typeSpent = TypeSpent.builder()
                 .name("Outros gastos")
-                .color(TypeSpentColor.WHITE)
+                .color(TypeSpentColor.GRAY)
                 .totalSpent(new BigDecimal(0))
                 .build();
         typeSpentRepository.save(typeSpent);

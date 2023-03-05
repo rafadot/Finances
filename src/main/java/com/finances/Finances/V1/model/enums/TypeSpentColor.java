@@ -8,5 +8,5 @@ public enum TypeSpentColor {
     ORANGE,
     RED,
     BLUE,
-    WHITE;
+    GRAY;
 }
