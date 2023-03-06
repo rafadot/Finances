@@ -26,4 +26,6 @@ public class EmailVerify {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "America/Fortaleza")
     private Instant instant;
+
+    private Boolean checked;
 }

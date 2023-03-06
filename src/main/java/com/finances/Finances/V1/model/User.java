@@ -52,7 +52,7 @@ public class User {
     @JoinColumn(name = "app_user_id")
     private List<TypeSpent> typeSpentList = new ArrayList<>();
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private EmailVerify emailVerify;
 
 }

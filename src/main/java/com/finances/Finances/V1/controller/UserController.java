@@ -2,8 +2,8 @@ package com.finances.Finances.V1.controller;
 
 import com.finances.Finances.V1.dto.dashboard.DashboardResponse;
 import com.finances.Finances.V1.dto.user.UserRequest;
-import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
+import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.service.interfaces.DashboardService;
 import com.finances.Finances.V1.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/dev")
-    public ResponseEntity<List<AllUserResponse>> allUsers(){
+    public ResponseEntity<List<User>> allUsers(){
         return new ResponseEntity<>(userService.allUsers(),HttpStatus.OK);
     }
 
@@ -48,4 +48,20 @@ public class UserController {
     public ResponseEntity<Map<String,String>> forgetPassword(@RequestParam String email){
         return new ResponseEntity<>(userService.forgetPassword(email),HttpStatus.OK);
     }
+
+    @GetMapping("/validForgetPassword")
+    public ResponseEntity<Boolean> validForgetPassword(@RequestParam String email, @RequestParam int code){
+        return new ResponseEntity<>(userService.validForgetPassword(email,code),HttpStatus.OK);
+    }
+
+    @PatchMapping("/patchForgetPassword")
+    public ResponseEntity<Map<String,String>> patchForgetPassword(@RequestParam String email,@RequestParam String password){
+        return new ResponseEntity<>(userService.patchForgetPassword(email,password),HttpStatus.OK);
+    }
+
+    @PatchMapping("/patchPassword")
+    public ResponseEntity<Map<String,String>> patchPassword(@RequestParam UUID userID, @RequestParam String currentPassword, @RequestParam String newPassword){
+        return new ResponseEntity<>(userService.patchPassword(userID,currentPassword,newPassword),HttpStatus.OK);
+    }
+
 }

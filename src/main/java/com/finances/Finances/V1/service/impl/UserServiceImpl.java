@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -78,12 +79,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<AllUserResponse> allUsers() {
-        return userRepository.findAll().stream().map(m ->{
-            AllUserResponse response = new AllUserResponse();
-            BeanUtils.copyProperties(m,response);
-            return response;
-        }).collect(Collectors.toList());
+    public List<User> allUsers() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -95,7 +92,6 @@ public class UserServiceImpl implements UserService {
 
         Map<String,String> response = new HashMap<>();
         response.put("message",username + " deletado com sucesso!");
-
         return response;
     }
 
@@ -115,6 +111,7 @@ public class UserServiceImpl implements UserService {
         EmailVerify verify = EmailVerify.builder()
                 .code(code)
                 .instant(Instant.now())
+                .checked(false)
                 .build();
         userEmailVerifyRepository.save(verify);
 
@@ -125,6 +122,50 @@ public class UserServiceImpl implements UserService {
 
         Map<String,String> response = new HashMap<>();
         response.put("message","Email enviado para " + toEmail);
+        return response;
+    }
+
+    @Override
+    public Boolean validForgetPassword(String email, int code) {
+        User user = UserUtil.validEmail(email,userRepository);
+
+        if(user.getEmailVerify().getCode() != code)
+            throw new BadRequestException("Código inválido");
+        else if(ChronoUnit.MINUTES.between(user.getEmailVerify().getInstant(),Instant.now()) > 5)
+            throw new BadRequestException("Código expirado");
+
+        user.getEmailVerify().setChecked(true);
+        userRepository.save(user);
+        return true;
+    }
+
+    @Override
+    public Map<String, String> patchForgetPassword(String email, String password) {
+        User user = UserUtil.validEmail(email,userRepository);
+
+        if(!user.getEmailVerify().getChecked())
+            throw new BadRequestException("Algo deu errado, por favor solicite um novo código");
+
+        user.setPassword(encoder.encode(password));
+        userEmailVerifyRepository.delete(user.getEmailVerify());
+        userRepository.save(user);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message","Senha alterada com sucesso " + user.getUserName() + "!");
+        return response;
+    }
+
+    @Override
+    public Map<String, String> patchPassword(UUID userID, String currentPassword, String newPassword) {
+        User user = UserUtil.valid(userID,userRepository);
+
+        if(!encoder.matches(user.getPassword(),currentPassword))
+            throw new BadRequestException("Senha inválida");
+
+        user.setPassword(encoder.encode(newPassword));
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message","Senha alterada com sucesso " + user.getUserName() + "!");
         return response;
     }
 }
