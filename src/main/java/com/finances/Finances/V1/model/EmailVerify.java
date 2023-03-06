@@ -22,7 +22,7 @@ public class EmailVerify {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
-    private int code;
+    private Integer code;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss" ,timezone = "America/Fortaleza")
     private Instant instant;
