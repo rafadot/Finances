@@ -3,13 +3,16 @@ package com.finances.Finances.V1.service.impl;
 import com.finances.Finances.V1.dto.user.UserRequest;
 import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
+import com.finances.Finances.V1.model.EmailVerify;
 import com.finances.Finances.V1.model.TypeSpent;
 import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.model.Wallet;
 import com.finances.Finances.V1.model.enums.TypeSpentColor;
 import com.finances.Finances.V1.repository.TypeSpentRepository;
+import com.finances.Finances.V1.repository.UserEmailVerifyRepository;
 import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.repository.WalletRepository;
+import com.finances.Finances.V1.service.interfaces.EmailService;
 import com.finances.Finances.V1.service.interfaces.UserService;
 import com.finances.Finances.V1.util.UserUtil;
 import com.finances.Finances.exceptions.management.BadRequestException;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -30,6 +34,8 @@ public class UserServiceImpl implements UserService {
     private final WalletRepository walletRepository;
     private final TypeSpentRepository typeSpentRepository;
     private final PasswordEncoder encoder;
+    private final EmailService emailService;
+    private final UserEmailVerifyRepository userEmailVerifyRepository;
 
     @Override
     public UserResponse create(UserRequest userRequest) {
@@ -90,6 +96,35 @@ public class UserServiceImpl implements UserService {
         Map<String,String> response = new HashMap<>();
         response.put("message",username + " deletado com sucesso!");
 
+        return response;
+    }
+
+    @Override
+    public Map<String, String> forgetPassword(String toEmail) {
+        Optional<User> optUser = userRepository.findByEmail(toEmail);
+
+        if(!optUser.isPresent()){
+            throw new BadRequestException("Email não cadastrado");
+        }
+
+        User user = optUser.get();
+
+        Random r = new Random();
+        int code = r.nextInt(900000) + 100000;
+
+        EmailVerify verify = EmailVerify.builder()
+                .code(code)
+                .instant(Instant.now())
+                .build();
+        userEmailVerifyRepository.save(verify);
+
+        user.setEmailVerify(verify);
+        userRepository.save(user);
+
+        emailService.forgetPassword(toEmail,code);
+
+        Map<String,String> response = new HashMap<>();
+        response.put("message","Email enviado para " + toEmail);
         return response;
     }
 }

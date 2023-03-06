@@ -4,7 +4,6 @@ import com.finances.Finances.V1.dto.dashboard.DashboardResponse;
 import com.finances.Finances.V1.dto.user.UserRequest;
 import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
-import com.finances.Finances.V1.model.User;
 import com.finances.Finances.V1.service.interfaces.DashboardService;
 import com.finances.Finances.V1.service.interfaces.UserService;
 import lombok.RequiredArgsConstructor;
@@ -43,5 +42,10 @@ public class UserController {
     @GetMapping("/dashboard")
     public ResponseEntity<DashboardResponse> getUserDashboard(@RequestParam UUID userID){
         return new ResponseEntity<>(dashboardService.getUserDashboard(userID), HttpStatus.OK);
+    }
+
+    @GetMapping("/forgetPassword")
+    public ResponseEntity<Map<String,String>> forgetPassword(@RequestParam String email){
+        return new ResponseEntity<>(userService.forgetPassword(email),HttpStatus.OK);
     }
 }

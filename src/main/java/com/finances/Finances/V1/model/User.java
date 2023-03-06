@@ -52,4 +52,7 @@ public class User {
     @JoinColumn(name = "app_user_id")
     private List<TypeSpent> typeSpentList = new ArrayList<>();
 
+    @OneToOne
+    private EmailVerify emailVerify;
+
 }

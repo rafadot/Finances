@@ -18,4 +18,13 @@ public class UserUtil {
 
         return user.get();
     }
+
+    public static User validEmail(String email, UserRepository userRepository){
+        Optional<User> user = userRepository.findByEmail(email);
+
+        if(!user.isPresent())
+            throw new BadRequestException("Email do usuário inválido");
+
+        return user.get();
+    }
 }
