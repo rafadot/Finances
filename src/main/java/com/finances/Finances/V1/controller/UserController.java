@@ -54,7 +54,7 @@ public class UserController {
         return new ResponseEntity<>(userService.validForgetPassword(email,code),HttpStatus.OK);
     }
 
-    @PatchMapping("/patchForgetPassword")
+    @GetMapping("/patchForgetPassword")
     public ResponseEntity<Map<String,String>> patchForgetPassword(@RequestParam String email,@RequestParam String password){
         return new ResponseEntity<>(userService.patchForgetPassword(email,password),HttpStatus.OK);
     }
