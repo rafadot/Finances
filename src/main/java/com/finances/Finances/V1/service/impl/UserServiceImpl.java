@@ -142,11 +142,12 @@ public class UserServiceImpl implements UserService {
     public Map<String, String> patchForgetPassword(String email, String password) {
         User user = UserUtil.validEmail(email,userRepository);
 
-        if(!user.getEmailVerify().getChecked())
+        if(user.getEmailVerify() == null || !user.getEmailVerify().getChecked())
             throw new BadRequestException("Algo deu errado, por favor solicite um novo código");
 
         user.setPassword(encoder.encode(password));
-        userEmailVerifyRepository.delete(user.getEmailVerify());
+        userEmailVerifyRepository.deleteById(user.getEmailVerify().getId());
+        user.setEmailVerify(null);
         userRepository.save(user);
 
         Map<String, String> response = new HashMap<>();
