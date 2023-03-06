@@ -25,7 +25,6 @@ import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -121,7 +120,7 @@ public class UserServiceImpl implements UserService {
         emailService.forgetPassword(toEmail,code);
 
         Map<String,String> response = new HashMap<>();
-        response.put("message","Email enviado para " + toEmail);
+        response.put("message","Email enviado para " + toEmail + ", expira em 5 minutos!");
         return response;
     }
 
