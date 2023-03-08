@@ -4,14 +4,21 @@ import com.finances.Finances.V1.dto.spent.SpentRequest;
 import com.finances.Finances.V1.dto.spent.SpentResponse;
 import com.finances.Finances.V1.dto.type_spent.TypeSpentRequest;
 import com.finances.Finances.V1.dto.type_spent.TypeSpentResponse;
+import com.finances.Finances.V1.model.TypeSpent;
+import com.finances.Finances.V1.model.User;
+import com.finances.Finances.V1.repository.UserRepository;
 import com.finances.Finances.V1.service.interfaces.SpentService;
 import com.finances.Finances.V1.service.interfaces.TypeSpentService;
+import com.finances.Finances.V1.util.DatesUtil;
+import com.finances.Finances.exceptions.management.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +29,7 @@ public class SpentController {
 
     private final TypeSpentService typeSpentService;
     private final SpentService spentService;
+    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<SpentResponse> create(
@@ -34,5 +42,14 @@ public class SpentController {
     @PostMapping("/typeSpent")
     public ResponseEntity<TypeSpentResponse> create(@RequestParam UUID userId, @RequestBody @Valid TypeSpentRequest request){
         return new ResponseEntity<>(typeSpentService.create(userId,request), HttpStatus.CREATED);
+    }
+
+    @GetMapping("/teste")
+    public ResponseEntity<List<TypeSpent>> teste(@RequestParam UUID userId, @RequestParam String date){
+        Optional<User> optUser = userRepository.findById(userId);
+        if(!optUser.isPresent()){
+            throw new BadRequestException("aa");
+        }
+        return new ResponseEntity<>(DatesUtil.filterSpentDays(optUser.get().getTypeSpentList(),date),HttpStatus.OK);
     }
 }
