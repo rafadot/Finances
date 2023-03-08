@@ -55,6 +55,7 @@ public class SpentServiceImpl implements SpentService {
                 typeSpentRepository.save(t);
 
                 user.getWallet().setMonthlyExpense(user.getWallet().getMonthlyExpense().add(spent.getValue()));
+                user.getWallet().setCurrentBalance(user.getWallet().getCurrentBalance().subtract(spent.getValue()));
                 userRepository.save(user);
 
                 SpentResponse response = new SpentResponse();
