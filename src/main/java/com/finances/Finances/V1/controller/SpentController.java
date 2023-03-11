@@ -44,9 +44,7 @@ public class SpentController {
     }
 
     @GetMapping("/typeSpentFiltered")
-    public ResponseEntity<List<TypeSpentResponse>> typeSpentFiltered(@RequestParam UUID userId,
-                                                                     @RequestParam String initialDate,
-                                                                     @RequestParam String finalDate){
-        return new ResponseEntity<>(typeSpentService.typeSpentFiltered(userId,initialDate,finalDate),HttpStatus.OK);
+    public ResponseEntity<List<TypeSpentResponse>> typeSpentFiltered(@RequestParam UUID userId, @RequestParam String date){
+        return new ResponseEntity<>(typeSpentService.typeSpentFiltered(userId,date),HttpStatus.OK);
     }
 }

@@ -11,5 +11,5 @@ public interface TypeSpentService {
 
     List<TypeSpentResponse> listTypeSpent(UUID userId);
 
-    List<TypeSpentResponse> typeSpentFiltered(UUID userId, String initialDateRequest, String finalDateRequest);
+    List<TypeSpentResponse> typeSpentFiltered(UUID userId, String date);
 }

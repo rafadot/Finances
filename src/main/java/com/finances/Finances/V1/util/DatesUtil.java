@@ -36,21 +36,20 @@ public class DatesUtil {
         return response;
     }
 
-    public static List<TypeSpent> filterSpentDays(List<TypeSpent>typeSpentList, String initialDateRequest, String finalDateRequest){
-        LocalDate initialDate = LocalDate.parse(initialDateRequest);
-        LocalDate finalDate = LocalDate.parse(finalDateRequest);
-        long range = ChronoUnit.DAYS.between(initialDate,finalDate);
+    public static List<TypeSpent> filterSpentDays(List<TypeSpent>typeSpentList, String dateRequest){
+        LocalDate date = LocalDate.parse(dateRequest);
+        long range = ChronoUnit.DAYS.between(date,LocalDate.now());
         List<TypeSpent> responseList = new ArrayList<>();
 
+        log.info(String.valueOf(range));
         for(TypeSpent typeSpent : typeSpentList){
             typeSpent.setSpentList(typeSpent.getSpentList()
                     .stream()
-                    .filter(spent -> ChronoUnit.DAYS.between(spent.getDate(),initialDate) <= range)
+                    .filter(spent -> ChronoUnit.DAYS.between(spent.getDate(),LocalDate.now()) <= range)
                     .collect(Collectors.toList()));
             responseList.add(typeSpent);
         }
 
         return responseList;
-
     }
 }

@@ -58,10 +58,9 @@ public class TypeSpentServiceImpl implements TypeSpentService {
     }
 
     @Override
-    public List<TypeSpentResponse> typeSpentFiltered(UUID userId, String initialDateRequest, String finalDateRequest) {
+    public List<TypeSpentResponse> typeSpentFiltered(UUID userId, String date) {
         User user = UserUtil.valid(userId,userRepository);
-
-        List<TypeSpent> typeSpentFiltered = DatesUtil.filterSpentDays(user.getTypeSpentList(),initialDateRequest,finalDateRequest);
+        List<TypeSpent> typeSpentFiltered = DatesUtil.filterSpentDays(user.getTypeSpentList(),date);
 
         return typeSpentFiltered
                 .stream()
