@@ -29,7 +29,6 @@ public class SpentController {
 
     private final TypeSpentService typeSpentService;
     private final SpentService spentService;
-    private final UserRepository userRepository;
 
     @PostMapping
     public ResponseEntity<SpentResponse> create(
@@ -44,12 +43,10 @@ public class SpentController {
         return new ResponseEntity<>(typeSpentService.create(userId,request), HttpStatus.CREATED);
     }
 
-    @GetMapping("/teste")
-    public ResponseEntity<List<TypeSpent>> teste(@RequestParam UUID userId, @RequestParam String date){
-        Optional<User> optUser = userRepository.findById(userId);
-        if(!optUser.isPresent()){
-            throw new BadRequestException("aa");
-        }
-        return new ResponseEntity<>(DatesUtil.filterSpentDays(optUser.get().getTypeSpentList(),date),HttpStatus.OK);
+    @GetMapping("/typeSpentFiltered")
+    public ResponseEntity<List<TypeSpentResponse>> typeSpentFiltered(@RequestParam UUID userId,
+                                                                     @RequestParam String initialDate,
+                                                                     @RequestParam String finalDate){
+        return new ResponseEntity<>(typeSpentService.typeSpentFiltered(userId,initialDate,finalDate),HttpStatus.OK);
     }
 }

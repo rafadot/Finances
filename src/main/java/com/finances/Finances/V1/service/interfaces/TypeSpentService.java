@@ -10,4 +10,6 @@ public interface TypeSpentService {
     TypeSpentResponse create(UUID userid,TypeSpentRequest request);
 
     List<TypeSpentResponse> listTypeSpent(UUID userId);
+
+    List<TypeSpentResponse> typeSpentFiltered(UUID userId, String initialDateRequest, String finalDateRequest);
 }

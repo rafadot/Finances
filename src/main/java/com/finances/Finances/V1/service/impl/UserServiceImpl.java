@@ -1,7 +1,6 @@
 package com.finances.Finances.V1.service.impl;
 
 import com.finances.Finances.V1.dto.user.UserRequest;
-import com.finances.Finances.V1.dto.user.AllUserResponse;
 import com.finances.Finances.V1.dto.user.UserResponse;
 import com.finances.Finances.V1.model.EmailVerify;
 import com.finances.Finances.V1.model.TypeSpent;
@@ -17,6 +16,7 @@ import com.finances.Finances.V1.service.interfaces.UserService;
 import com.finances.Finances.V1.util.UserUtil;
 import com.finances.Finances.exceptions.management.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -28,6 +28,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -98,9 +99,8 @@ public class UserServiceImpl implements UserService {
     public Map<String, String> forgetPassword(String toEmail) {
         Optional<User> optUser = userRepository.findByEmail(toEmail);
 
-        if(!optUser.isPresent()){
+        if(!optUser.isPresent())
             throw new BadRequestException("Email não cadastrado");
-        }
 
         User user = optUser.get();
 
@@ -146,8 +146,9 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("Algo deu errado, por favor solicite um novo código");
 
         user.setPassword(encoder.encode(password));
-        userEmailVerifyRepository.deleteById(user.getEmailVerify().getId());
+        UUID emailVerifyId = user.getEmailVerify().getId();
         user.setEmailVerify(null);
+        userEmailVerifyRepository.deleteById(emailVerifyId);
         userRepository.save(user);
 
         Map<String, String> response = new HashMap<>();

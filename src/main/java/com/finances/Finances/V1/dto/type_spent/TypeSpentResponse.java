@@ -3,10 +3,7 @@ package com.finances.Finances.V1.dto.type_spent;
 import com.finances.Finances.V1.dto.spent.SpentResponse;
 import com.finances.Finances.V1.model.enums.TypeSpentColor;
 import com.finances.Finances.V1.util.BigDecimalUtil;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -17,6 +14,7 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TypeSpentResponse {
 
     private UUID id;
