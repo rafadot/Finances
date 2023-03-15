@@ -9,5 +9,5 @@ public interface DashboardService {
 
     DashboardResponse getUserDashboardLogin(User user);
 
-    DashboardResponse getUserDashboard(UUID userID);
+    DashboardResponse getUserDashboard(UUID userID,String dateRequest);
 }

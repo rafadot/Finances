@@ -1,5 +1,6 @@
 package com.finances.Finances.V1.service.interfaces;
 
+import com.finances.Finances.V1.dto.type_spent.GraphicTypeSpent;
 import com.finances.Finances.V1.dto.type_spent.TypeSpentRequest;
 import com.finances.Finances.V1.dto.type_spent.TypeSpentResponse;
 

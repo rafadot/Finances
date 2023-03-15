@@ -39,11 +39,6 @@ public class UserController {
         return new ResponseEntity<>(userService.deleteUser(userId),HttpStatus.OK);
     }
 
-    @GetMapping("/dashboard")
-    public ResponseEntity<DashboardResponse> getUserDashboard(@RequestParam UUID userID){
-        return new ResponseEntity<>(dashboardService.getUserDashboard(userID), HttpStatus.OK);
-    }
-
     @GetMapping("/forgetPassword")
     public ResponseEntity<Map<String,String>> forgetPassword(@RequestParam String email){
         return new ResponseEntity<>(userService.forgetPassword(email),HttpStatus.OK);

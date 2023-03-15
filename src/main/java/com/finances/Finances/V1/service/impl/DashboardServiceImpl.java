@@ -103,7 +103,7 @@ public class DashboardServiceImpl implements DashboardService {
     }
 
     @Override
-    public DashboardResponse getUserDashboard(UUID userID) {
+    public DashboardResponse getUserDashboard(UUID userID,String dateRequest) {
         User user = UserUtil.valid(userID,userRepository);
 
         UserResponse userResponse = new UserResponse();
@@ -111,6 +111,10 @@ public class DashboardServiceImpl implements DashboardService {
         final BigDecimal[] maxValueForColum = {new BigDecimal(0)};
         final BigDecimal[] maxValueForLine = {new BigDecimal(0)};
         final BigDecimal[] monthlyExpense = {new BigDecimal(0)};
+
+        if(!dateRequest.equals(""))
+            if(user.getTypeSpentList().size() > 0)
+                user.setTypeSpentList(DatesUtil.filterSpentDays(user.getTypeSpentList(),dateRequest));
 
         BeanUtils.copyProperties(user,userResponse);
         BeanUtils.copyProperties(user.getWallet(),walletResponse);
@@ -137,14 +141,26 @@ public class DashboardServiceImpl implements DashboardService {
                                     BeanUtils.copyProperties(m,response);
 
                                     BigDecimal[] newTotalSpent = {new BigDecimal(0)};
-                                    response.setSpentList(m.getSpentList().stream()
-                                            .filter(spent -> ChronoUnit.MONTHS.between(spent.getDate(),LocalDate.now()) < 1)
-                                            .map(spent -> {
-                                                newTotalSpent[0] = newTotalSpent[0].add(spent.getValue());
-                                                SpentResponse spentResponse = new SpentResponse();
-                                                BeanUtils.copyProperties(spent,spentResponse);
-                                                return spentResponse;
-                                            }).collect(Collectors.toList()));
+
+                                    if(dateRequest.equals("")){
+                                        response.setSpentList(m.getSpentList().stream()
+                                                .filter(spent -> ChronoUnit.MONTHS.between(spent.getDate(),LocalDate.now()) < 1)
+                                                .map(spent -> {
+                                                    newTotalSpent[0] = newTotalSpent[0].add(spent.getValue());
+                                                    SpentResponse spentResponse = new SpentResponse();
+                                                    BeanUtils.copyProperties(spent,spentResponse);
+                                                    return spentResponse;
+                                                }).collect(Collectors.toList()));
+                                    }else {
+                                        response.setSpentList(m.getSpentList().stream()
+                                                .map(spent -> {
+                                                    newTotalSpent[0] = newTotalSpent[0].add(spent.getValue());
+                                                    SpentResponse spentResponse = new SpentResponse();
+                                                    BeanUtils.copyProperties(spent,spentResponse);
+                                                    return spentResponse;
+                                                }).collect(Collectors.toList()));
+                                    }
+
 
                                     if(newTotalSpent[0].compareTo(maxValueForColum[0]) > 0)
                                         maxValueForColum[0] = newTotalSpent[0];
