@@ -169,4 +169,10 @@ public class UserServiceImpl implements UserService {
         response.put("message","Senha alterada com sucesso " + user.getUserName() + "!");
         return response;
     }
+
+    @Override
+    public Boolean emailValidation(String email) {
+        User user = UserUtil.validEmail(email,userRepository);
+        return true;
+    }
 }

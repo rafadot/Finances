@@ -16,6 +16,6 @@ public interface UserService {
     Boolean validForgetPassword(String email, int code);
     Map<String,String> patchForgetPassword(String email, String password);
     Map<String,String> patchPassword(UUID userID, String currentPassword, String newPassword);
-
+    Boolean emailValidation(String email);
 
 }

@@ -59,4 +59,8 @@ public class UserController {
         return new ResponseEntity<>(userService.patchPassword(userID,currentPassword,newPassword),HttpStatus.OK);
     }
 
+    @GetMapping("/emailValidation")
+    public ResponseEntity<Boolean> emailValidation(@RequestParam String email){
+        return new ResponseEntity<>(userService.emailValidation(email),HttpStatus.OK);
+    }
 }
